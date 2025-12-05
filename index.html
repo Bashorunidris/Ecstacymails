@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECSTACY - Bulk Email Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.16.29/font/lucide.min.css" rel="stylesheet">
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        /* Login Page */
+        .login-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo i {
+            font-size: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-logo h1 {
+            font-size: 32px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-logo p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .error-msg {
+            background: #fee;
+            color: #c00;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            margin: 5px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .menu-item i {
+            font-size: 20px;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .top-bar h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        .btn-logout {
+            padding: 10px 20px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout:hover {
+            background: #d32f2f;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stat-card .value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* Email List */
+        .email-list {
+            margin-top: 20px;
+        }
+
+        .email-item {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .email-item:hover {
+            background: #f9f9f9;
+        }
+
+        .email-info {
+            flex: 1;
+        }
+
+        .email-address {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .email-segment {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .email-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            padding: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            border-radius: 4px;
+        }
+
+        .icon-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .icon-btn.delete:hover {
+            color: #f44336;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Template Blocks */
+        .template-blocks {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .template-block {
+            padding: 15px 10px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .template-block:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .template-block-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .template-block-label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* File Upload */
+        .file-upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-area:hover {
+            background: #f5f5ff;
+        }
+
+        .file-upload-area input {
+            display: none;
+        }
+
+        .uploaded-files {
+            margin-top: 15px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-header h2,
+            .menu-item span {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+
+            .template-blocks {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <div class="login-logo">
+                <i data-lucide="mail"></i>
+                <h1>ECSTACY</h1>
+                <p>Bulk Email Platform</p>
+            </div>
+            <div id="loginError" class="error-msg hidden"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="admin@ecstacy.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
+                Demo: admin@ecstacy.com / admin123
+            </p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i data-lucide="mail" style="font-size: 40px;"></i>
+                <h2>ECSTACY</h2>
+            </div>
+            <div class="menu-item active" data-view="dashboard">
+                <i data-lucide="bar-chart-3"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="menu-item" data-view="emails">
+                <i data-lucide="users"></i>
+                <span>Email List</span>
+            </div>
+            <div class="menu-item" data-view="compose">
+                <i data-lucide="mail"></i>
+                <span>Compose</span>
+            </div>
+            <div class="menu-item" data-view="scheduled">
+                <i data-lucide="calendar"></i>
+                <span>Scheduled</span>
+            </div>
+            <div class="menu-item" data-view="analytics">
+                <i data-lucide="bar-chart-3"></i>
+                <span>Analytics</span>
+            </div>
+            <div class="menu-item" data-view="settings">
+                <i data-lucide="settings"></i>
+                <span>Settings</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1 id="pageTitle">Dashboard</h1>
+                <button class="btn-logout" id="logoutBtn">
+                    <i data-lucide="log-out"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+
+            <!-- Dashboard View -->
+            <div id="dashboardView" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Emails</h3>
+                        <div class="value" id="totalEmailsCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Sent</h3>
+                        <div class="value" id="sentCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Delivered</h3>
+                        <div class="value" id="deliveredCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Opened</h3>
+                        <div class="value" id="openedCount">0</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Quick Actions</h2>
+                    </div>
+                    <div style="display: flex; gap: 15px;">
+                        <button class="btn-primary" onclick="switchView('compose')">
+                            <i data-lucide="mail"></i>
+                            Compose Email
+                        </button>
+                        <button class="btn-primary" onclick="switchView('emails')">
+                            <i data-lucide="users"></i>
+                            Manage Emails
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email List View -->
+            <div id="emailsView" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Email List Management</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-primary" onclick="openAddEmailModal()">
+                                <i data-lucide="plus"></i>
+                                Add Single Email
+                            </button>
+                            <button class="btn-primary" onclick="openBulkImportModal()">
+                                <i data-lucide="upload"></i>
+                                Bulk Import
+                            </button>
+                            <button class="btn-primary" onclick="openManualAddModal()">
+                                <i data-lucide="edit"></i>
+                                Add Multiple Manually
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="filters">
+                        <select id="segmentFilter" class="filter-select">
+                            <option value="all">All Segments</option>
+                            <option value="General">General</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="VIP">VIP</option>
+                            <option value="Updates">Updates</option>
+                        </select>
+                    </div>
+
+                    <div id="emailList" class="email-list">
+                        <!-- Email items will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compose View -->
+            <div id="composeView" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Compose Email</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Subject</label>
+                        <input type="text" id="emailSubject" placeholder="Enter email subject" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+
+                    <div class="template-blocks">
+                        <div class="template-block" onclick="addTemplateBlock('title')">
+                            <div class="template-block-icon">📝</div>
+                            <div class="template-block-label">Title</div>
+                        </div>
+                        <div class="template-block" onclick="addTemplateBlock('paragraph')">
+                            <div class="template-block-icon">📄</div>
+                            <div class="template-block-label">Paragraph</div>
+                        </div>
+                        <div class="template-block" onclick="addTemplateBlock('image')">
+                            <div class="template-block-icon">🖼️</div>
+                            <div class="template-block-label">Image</div>
+                        </div>
+                        <div class="template-block" onclick="addTemplateBlock('button')">
+                            <div class="template-block-icon">🔘</div>
+                            <div class="template-block-label">Button</div>
+                        </div>
+                        <div class="template-block" onclick="addTemplateBlock('divider')">
+                            <div class="template-block-icon">➖</div>
+                            <div class="template-block-label">Divider</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Content</label>
+                        <textarea id="emailContent" style="width: 100%; min-height: 400px;"></textarea>
+                    </div>
+
+                    <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+                        <i data-lucide="upload" style="font-size: 40px; color: #667eea;"></i>
+                        <p style="margin-top: 10px; color: #666;">Click to upload files (images, PDFs, documents)</p>
+                        <input type="file" id="fileInput" multiple>
+                    </div>
+
+                    <div id="uploadedFiles" class="uploaded-files"></div>
+
+                    <div class="form-group">
+                        <label>Send To</label>
+                        <select id="sendToSegment" class="filter-select" style="width: 100%;">
+                            <option value="all">All Emails</option>
+                            <option value="General">General</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="VIP">VIP</option>
+                            <option value="Updates">Updates</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="scheduleCheckbox" onchange="toggleSchedule()">
+                            Schedule for later
+                        </label>
+                        <input type="datetime-local" id="scheduleDateTime" class="filter-select hidden" style="width: 100%; margin-top: 10px;">
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                        <button class="btn-primary" onclick="sendEmail()">
+                            <i data-lucide="send"></i>
+                            Send Now
+                        </button>
+                        <button class="btn-secondary" onclick="saveDraft()">
+                            Save Draft
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scheduled View -->
+            <div id="scheduledView" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Scheduled Emails</h2>
+                    </div>
+                    <div id="scheduledList"></div>
+                </div>
+            </div>
+
+            <!-- Analytics View -->
+            <div id="analyticsView" class="content-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Sent</h3>
+                        <div class="value" id="analyticsSent">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Delivered</h3>
+                        <div class="value" id="analyticsDelivered">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Opened</h3>
+                        <div class="value" id="analyticsOpened">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Open Rate</h3>
+                        <div class="value" id="analyticsOpenRate">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settingsView" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Settings</h2>
+                    </div>
+                    <div class="form-group">
+                        <label>Resend API Key</label>
+                        <input type="password" id="resendApiKey" placeholder="re_..." style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Cloudinary Cloud Name</label>
+                        <input type="text" id="cloudName" placeholder="your-cloud-name" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <button class="btn-primary" onclick="saveSettings()">
+                        Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Email Modal -->
+    <div id="addEmailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Email</h2>
+                <button class="close-modal" onclick="closeModal('addEmailModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="newEmailAddress" placeholder="user@example.com" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+            </div>
+            <div class="form-group">
+                <label>Segment</label>
+                <select id="newEmailSegment" class="filter-select" style="width: 100%;">
+                    <option value="General">General</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="VIP">VIP</option>
+                    <option value="Updates">Updates</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="addEmail()">Add Email</button>
+        </div>
+    </div>
+
+    <!-- Bulk Import Modal -->
+    <div id="bulkImportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Bulk Import Emails</h2>
+                <button class="close-modal" onclick="closeModal('bulkImportModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Paste emails (one per line)</label>
+                <textarea id="bulkEmailInput" placeholder="email1@example.com&#10;email2@example.com&#10;email3@example.com" style="width: 100%; min-height: 200px; padding: 12px; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Assign to Segment</label>
+                <select id="bulkEmailSegment" class="filter-select" style="width: 100%;">
+                    <option value="General">General</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="VIP">VIP</option>
+                    <option value="Updates">Updates</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="bulkImportEmails()">Import Emails</button>
+        </div>
+    </div>
+
+    <!-- Manual Add Multiple Emails Modal -->
+    <div id="manualAddModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>Add Multiple Emails Manually</h2>
+                <button class="close-modal" onclick="closeModal('manualAddModal')">×</button>
+            </div>
+            
+            <div class="form-group">
+                <label>Default Segment for All</label>
+                <select id="manualAddSegment" class="filter-select" style="width: 100%;">
+                    <option value="General">General</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="VIP">VIP</option>
+                    <option value="Updates">Updates</option>
+                </select>
+            </div>
+
+            <div id="manualEmailInputs" style="max-height: 400px; overflow-y: auto; margin: 20px 0;">
+                <!-- Email input fields will be added here -->
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button class="btn-secondary" onclick="addEmailInputField()">
+                    <i data-lucide="plus"></i>
+                    Add Another Email Field
+                </button>
+                <button class="btn-secondary" onclick="addMultipleEmailFields(5)">
+                    Add 5 Fields
+                </button>
+                <button class="btn-secondary" onclick="addMultipleEmailFields(10)">
+                    Add 10 Fields
+                </button>
+            </div>
+
+            <button class="btn-primary" onclick="saveManualEmails()">
+                Save All Emails
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDW8V2SjNITrA4LcdmeILh944mTbOKnM0c",
+            authDomain: "rewarderhub.firebaseapp.com",
+            projectId: "rewarderhub",
+            storageBucket: "rewarderhub.firebasestorage.app",
+            messagingSenderId: "85965945106",
+            appId: "1:85965945106:web:fa0a57d8968926e1041bcb",
+            measurementId: "G-F2ERB5NGN0"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Data storage
+        let emailDatabase = [];
+        let scheduledEmails = [];
+        let analytics = { sent: 0, delivered: 0, opened: 0 };
+        let settings = { resendApiKey: '', cloudName: '' };
+        let uploadedFiles = [];
+        let currentUser = null;
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                // Firebase Authentication
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                currentUser = userCredential.user;
+                
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                await loadData();
+            } catch (error) {
+                const errorMsg = document.getElementById('loginError');
+                errorMsg.textContent = 'Invalid credentials. Error: ' + error.message;
+                errorMsg.classList.remove('hidden');
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            await auth.signOut();
+            currentUser = null;
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        });
+
+        // View switching
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const view = this.getAttribute('data-view');
+                switchView(view);
+            });
+        });
+
+        function switchView(view) {
+            // Update active menu item
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-view') === view) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            const viewMap = {
+                'dashboard': 'dashboardView',
+                'emails': 'emailsView',
+                'compose': 'composeView',
+                'scheduled': 'scheduledView',
+                'analytics': 'analyticsView',
+                'settings': 'settingsView'
+            };
+
+            document.getElementById(viewMap[view]).classList.add('active');
+
+            // Update page title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'emails': 'Email List',
+                'compose': 'Compose Email',
+                'scheduled': 'Scheduled Emails',
+                'analytics': 'Analytics',
+                'settings': 'Settings'
+            };
+            document.getElementById('pageTitle').textContent = titles[view];
+
+            // Refresh data for specific views
+            if (view === 'emails') renderEmailList();
+            if (view === 'scheduled') renderScheduledEmails();
+            if (view === 'analytics') updateAnalytics();
+        }
+
+        // Load data from Firebase
+        async function loadData() {
+            try {
+                // Load emails from Firestore
+                const emailsSnapshot = await db.collection('emails').get();
+                emailDatabase = emailsSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                // Load scheduled emails
+                const scheduledSnapshot = await db.collection('scheduledEmails').get();
+                scheduledEmails = scheduledSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                // Load analytics
+                const analyticsDoc = await db.collection('analytics').doc('stats').get();
+                if (analyticsDoc.exists) {
+                    analytics = analyticsDoc.data();
+                } else {
+                    // Create initial analytics document
+                    await db.collection('analytics').doc('stats').set({
+                        sent: 0,
+                        delivered: 0,
+                        opened: 0
+                    });
+                }
+
+                // Load settings
+                const settingsDoc = await db.collection('settings').doc('config').get();
+                if (settingsDoc.exists) {
+                    settings = settingsDoc.data();
+                }
+
+                updateDashboard();
+                renderEmailList();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                alert('Error loading data from Firebase: ' + error.message);
+            }
+        }
+
+        // Save data to Firebase
+        async function saveData() {
+            try {
+                // Save analytics
+                await db.collection('analytics').doc('stats').set(analytics);
+                
+                // Save settings
+                await db.collection('settings').doc('config').set(settings);
+            } catch (error) {
+                console.error('Error saving data:', error);
+            }
+        }
+
+        // Update dashboard stats
+        function updateDashboard() {
+            document.getElementById('totalEmailsCount').textContent = emailDatabase.length;
+            document.getElementById('sentCount').textContent = analytics.sent;
+            document.getElementById('deliveredCount').textContent = analytics.delivered;
+            document.getElementById('openedCount').textContent = analytics.opened;
+        }
+
+        // Email List Management
+        function renderEmailList() {
+            const emailList = document.getElementById('emailList');
+            const filter = document.getElementById('segmentFilter').value;
+            
+            let filteredEmails = emailDatabase;
+            if (filter !== 'all') {
+                filteredEmails = emailDatabase.filter(e => e.segment === filter);
+            }
+
+            if (filteredEmails.length === 0) {
+                emailList.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No emails found. Add some emails to get started.</p>';
+                return;
+            }
+
+            emailList.innerHTML = filteredEmails.map((email, index) => `
+                <div class="email-item">
+                    <div class="email-info">
+                        <span class="email-address">${email.address}</span>
+                        <span class="email-segment">${email.segment}</span>
+                    </div>
+                    <div class="email-actions">
+                        <button class="icon-btn" onclick="editEmail(${index})" title="Edit">
+                            <i data-lucide="edit"></i>
+                        </button>
+                        <button class="icon-btn delete" onclick="deleteEmail(${index})" title="Delete">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // Segment filter
+        document.getElementById('segmentFilter').addEventListener('change', renderEmailList);
+
+        // Modal functions
+        function openAddEmailModal() {
+            document.getElementById('addEmailModal').classList.add('active');
+        }
+
+        function openBulkImportModal() {
+            document.getElementById('bulkImportModal').classList.add('active');
+        }
+
+        function openManualAddModal() {
+            document.getElementById('manualAddModal').classList.add('active');
+            // Initialize with 3 input fields
+            const container = document.getElementById('manualEmailInputs');
+            container.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                addEmailInputField();
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        let emailInputCounter = 0;
+
+        function addEmailInputField() {
+            emailInputCounter++;
+            const container = document.getElementById('manualEmailInputs');
+            
+            const fieldDiv = document.createElement('div');
+            fieldDiv.className = 'email-item';
+            fieldDiv.id = `emailField_${emailInputCounter}`;
+            fieldDiv.style.marginBottom = '10px';
+            
+            fieldDiv.innerHTML = `
+                <div style="flex: 1; display: flex; gap: 10px; align-items: center;">
+                    <span style="color: #999; min-width: 30px;">${emailInputCounter}.</span>
+                    <input 
+                        type="email" 
+                        class="manual-email-input" 
+                        placeholder="email@example.com" 
+                        style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px;"
+                    >
+                    <select class="manual-email-segment" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        <option value="General">General</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="VIP">VIP</option>
+                        <option value="Updates">Updates</option>
+                    </select>
+                </div>
+                <button class="icon-btn delete" onclick="removeEmailInputField('emailField_${emailInputCounter}')" title="Remove">
+                    <i data-lucide="trash-2"></i>
+                </button>
+            `;
+            
+            container.appendChild(fieldDiv);
+            
+            // Set default segment
+            const defaultSegment = document.getElementById('manualAddSegment').value;
+            fieldDiv.querySelector('.manual-email-segment').value = defaultSegment;
+            
+            lucide.createIcons();
+        }
+
+        function addMultipleEmailFields(count) {
+            for (let i = 0; i < count; i++) {
+                addEmailInputField();
+            }
+        }
+
+        function removeEmailInputField(fieldId) {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.remove();
+            }
+        }
+
+        // Update segment for all fields when default changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const manualAddSegmentSelect = document.getElementById('manualAddSegment');
+            if (manualAddSegmentSelect) {
+                manualAddSegmentSelect.addEventListener('change', function() {
+                    const allSegmentSelects = document.querySelectorAll('.manual-email-segment');
+                    allSegmentSelects.forEach(select => {
+                        if (!select.value || select.value === '') {
+                            select.value = this.value;
+                        }
+                    });
+                });
+            }
+        });
+
+        async function saveManualEmails() {
+            const emailInputs = document.querySelectorAll('.manual-email-input');
+            const segmentInputs = document.querySelectorAll('.manual-email-segment');
+            
+            let added = 0;
+            let skipped = 0;
+            let errors = [];
+
+            try {
+                const batch = db.batch();
+
+                for (let i = 0; i < emailInputs.length; i++) {
+                    const email = emailInputs[i].value.trim();
+                    const segment = segmentInputs[i].value;
+
+                    if (!email) {
+                        continue; // Skip empty fields
+                    }
+
+                    // Validate email format
+                    if (!email.includes('@')) {
+                        errors.push(`Invalid email: ${email}`);
+                        continue;
+                    }
+
+                    // Check for duplicates
+                    if (emailDatabase.some(e => e.address === email)) {
+                        skipped++;
+                        continue;
+                    }
+
+                    const docRef = db.collection('emails').doc();
+                    batch.set(docRef, {
+                        address: email,
+                        segment: segment,
+                        dateAdded: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    emailDatabase.push({
+                        id: docRef.id,
+                        address: email,
+                        segment: segment,
+                        dateAdded: new Date().toISOString()
+                    });
+                    added++;
+                }
+
+                if (added > 0) {
+                    await batch.commit();
+                }
+
+                renderEmailList();
+                updateDashboard();
+                closeModal('manualAddModal');
+
+                let message = `Successfully added ${added} emails.`;
+                if (skipped > 0) message += ` ${skipped} duplicates skipped.`;
+                if (errors.length > 0) message += `\n\nErrors:\n${errors.join('\n')}`;
+                
+                alert(message);
+
+            } catch (error) {
+                console.error('Error saving manual emails:', error);
+                alert('Error saving emails: ' + error.message);
+            }
+        }
+
+        // Add single email
+        async function addEmail() {
+            const address = document.getElementById('newEmailAddress').value;
+            const segment = document.getElementById('newEmailSegment').value;
+
+            if (!address) {
+                alert('Please enter an email address');
+                return;
+            }
+
+            // Check for duplicates
+            if (emailDatabase.some(e => e.address === address)) {
+                alert('This email already exists');
+                return;
+            }
+
+            try {
+                // Add to Firestore
+                const docRef = await db.collection('emails').add({
+                    address: address,
+                    segment: segment,
+                    dateAdded: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                emailDatabase.push({
+                    id: docRef.id,
+                    address: address,
+                    segment: segment,
+                    dateAdded: new Date().toISOString()
+                });
+
+                renderEmailList();
+                updateDashboard();
+                closeModal('addEmailModal');
+
+                document.getElementById('newEmailAddress').value = '';
+                alert('Email added successfully!');
+            } catch (error) {
+                console.error('Error adding email:', error);
+                alert('Error adding email: ' + error.message);
+            }
+        }
+
+        // Bulk import emails
+        async function bulkImportEmails() {
+            const input = document.getElementById('bulkEmailInput').value;
+            const segment = document.getElementById('bulkEmailSegment').value;
+
+            if (!input.trim()) {
+                alert('Please enter at least one email');
+                return;
+            }
+
+            const emails = input.split('\n').map(e => e.trim()).filter(e => e);
+            let added = 0;
+            let skipped = 0;
+
+            try {
+                const batch = db.batch();
+
+                for (const email of emails) {
+                    if (email && !emailDatabase.some(e => e.address === email)) {
+                        const docRef = db.collection('emails').doc();
+                        batch.set(docRef, {
+                            address: email,
+                            segment: segment,
+                            dateAdded: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+
+                        emailDatabase.push({
+                            id: docRef.id,
+                            address: email,
+                            segment: segment,
+                            dateAdded: new Date().toISOString()
+                        });
+                        added++;
+                    } else {
+                        skipped++;
+                    }
+                }
+
+                await batch.commit();
+
+                renderEmailList();
+                updateDashboard();
+                closeModal('bulkImportModal');
+
+                document.getElementById('bulkEmailInput').value = '';
+                alert(`Imported ${added} emails. ${skipped} duplicates skipped.`);
+            } catch (error) {
+                console.error('Error importing emails:', error);
+                alert('Error importing emails: ' + error.message);
+            }
+        }
+
+        // Delete email
+        async function deleteEmail(index) {
+            if (confirm('Are you sure you want to delete this email?')) {
+                try {
+                    const email = emailDatabase[index];
+                    await db.collection('emails').doc(email.id).delete();
+                    
+                    emailDatabase.splice(index, 1);
+                    renderEmailList();
+                    updateDashboard();
+                } catch (error) {
+                    console.error('Error deleting email:', error);
+                    alert('Error deleting email: ' + error.message);
+                }
+            }
+        }
+
+        // Edit email (simple implementation)
+        async function editEmail(index) {
+            const email = emailDatabase[index];
+            const newAddress = prompt('Edit email address:', email.address);
+            if (newAddress && newAddress !== email.address) {
+                try {
+                    await db.collection('emails').doc(email.id).update({
+                        address: newAddress
+                    });
+                    
+                    emailDatabase[index].address = newAddress;
+                    renderEmailList();
+                } catch (error) {
+                    console.error('Error editing email:', error);
+                    alert('Error editing email: ' + error.message);
+                }
+            }
+        }
+
+        // Template blocks for email composer
+        const templateBlocks = {
+            title: '<h2 style="font-size: 24px; font-weight: bold; margin: 20px 0; color: #333;">Your Title Here</h2>',
+            paragraph: '<p style="margin: 15px 0; line-height: 1.6; color: #666;">Your paragraph text here. Edit this to add your content.</p>',
+            image: '<img src="https://via.placeholder.com/600x300" alt="Image" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 8px;" />',
+            button: '<div style="margin: 20px 0;"><a href="#" style="display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; font-weight: 600;">Click Me</a></div>',
+            divider: '<hr style="border: none; border-top: 2px solid #E5E7EB; margin: 30px 0;" />'
+        };
+
+        // Add template block to editor
+        function addTemplateBlock(type) {
+            const editor = document.getElementById('emailContent');
+            const currentContent = editor.value;
+            editor.value = currentContent + '\n' + templateBlocks[type];
+        }
+
+        // File upload handling
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const files = e.target.files;
+            handleFileUpload(files);
+        });
+
+        function handleFileUpload(files) {
+            const uploadedFilesDiv = document.getElementById('uploadedFiles');
+            
+            Array.from(files).forEach(file => {
+                // Simulate file upload (in production, upload to Cloudinary)
+                const fileUrl = URL.createObjectURL(file);
+                
+                uploadedFiles.push({
+                    name: file.name,
+                    url: fileUrl,
+                    type: file.type
+                });
+
+                // Add file to UI
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span>${file.name}</span>
+                    <div>
+                        <button class="btn-secondary" onclick="insertFileLink('${fileUrl}', '${file.name}')">Insert Link</button>
+                        <button class="icon-btn delete" onclick="removeFile('${file.name}')">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                `;
+                uploadedFilesDiv.appendChild(fileItem);
+            });
+
+            lucide.createIcons();
+        }
+
+        function insertFileLink(url, name) {
+            const editor = document.getElementById('emailContent');
+            const linkHtml = `<a href="${url}" style="color: #667eea; text-decoration: underline;">${name}</a>`;
+            editor.value += '\n' + linkHtml;
+        }
+
+        function removeFile(fileName) {
+            uploadedFiles = uploadedFiles.filter(f => f.name !== fileName);
+            renderUploadedFiles();
+        }
+
+        function renderUploadedFiles() {
+            const uploadedFilesDiv = document.getElementById('uploadedFiles');
+            uploadedFilesDiv.innerHTML = '';
+            uploadedFiles.forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span>${file.name}</span>
+                    <div>
+                        <button class="btn-secondary" onclick="insertFileLink('${file.url}', '${file.name}')">Insert Link</button>
+                        <button class="icon-btn delete" onclick="removeFile('${file.name}')">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                `;
+                uploadedFilesDiv.appendChild(fileItem);
+            });
+            lucide.createIcons();
+        }
+
+        // Schedule toggle
+        function toggleSchedule() {
+            const checkbox = document.getElementById('scheduleCheckbox');
+            const dateTimeInput = document.getElementById('scheduleDateTime');
+            
+            if (checkbox.checked) {
+                dateTimeInput.classList.remove('hidden');
+            } else {
+                dateTimeInput.classList.add('hidden');
+            }
+        }
+
+        // Send email
+        async function sendEmail() {
+            const subject = document.getElementById('emailSubject').value;
+            const content = document.getElementById('emailContent').value;
+            const segment = document.getElementById('sendToSegment').value;
+            const isScheduled = document.getElementById('scheduleCheckbox').checked;
+            const scheduleTime = document.getElementById('scheduleDateTime').value;
+
+            if (!subject || !content) {
+                alert('Please enter both subject and content');
+                return;
+            }
+
+            // Get recipient emails based on segment
+            let recipients = emailDatabase;
+            if (segment !== 'all') {
+                recipients = emailDatabase.filter(e => e.segment === segment);
+            }
+
+            if (recipients.length === 0) {
+                alert('No recipients found for selected segment');
+                return;
+            }
+
+            if (isScheduled && scheduleTime) {
+                try {
+                    // Schedule email in Firebase
+                    await db.collection('scheduledEmails').add({
+                        subject: subject,
+                        content: content,
+                        recipients: recipients.map(r => r.address),
+                        scheduledTime: scheduleTime,
+                        status: 'pending',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    scheduledEmails.push({
+                        subject: subject,
+                        content: content,
+                        recipients: recipients.map(r => r.address),
+                        scheduledTime: scheduleTime,
+                        status: 'pending',
+                        createdAt: new Date().toISOString()
+                    });
+
+                    alert(`Email scheduled for ${new Date(scheduleTime).toLocaleString()}`);
+                    clearComposer();
+                } catch (error) {
+                    console.error('Error scheduling email:', error);
+                    alert('Error scheduling email: ' + error.message);
+                }
+            } else {
+                // Send immediately
+                if (confirm(`Send email to ${recipients.length} recipients?`)) {
+                    try {
+                        await simulateSendEmail(recipients, subject, content);
+                        
+                        analytics.sent += recipients.length;
+                        analytics.delivered += recipients.length;
+                        await saveData();
+                        updateDashboard();
+                        
+                        alert(`Email sent to ${recipients.length} recipients!`);
+                        clearComposer();
+                    } catch (error) {
+                        console.error('Error sending email:', error);
+                        alert('Error sending email: ' + error.message);
+                    }
+                }
+            }
+        }
+
+        async function simulateSendEmail(recipients, subject, content) {
+            // Call your Vercel API endpoint
+            const API_URL = 'https://YOUR-APP-NAME.vercel.app/api/send';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        emails: recipients.map(r => r.address || r),
+                        subject: subject,
+                        content: content
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to send emails');
+                }
+
+                const result = await response.json();
+                console.log('Send result:', result);
+                return result;
+
+            } catch (error) {
+                console.error('Email sending error:', error);
+                throw error;
+            }
+        }
+
+        function saveDraft() {
+            const subject = document.getElementById('emailSubject').value;
+            const content = document.getElementById('emailContent').value;
+            
+            if (!subject && !content) {
+                alert('Nothing to save');
+                return;
+            }
+
+            localStorage.setItem('emailDraft', JSON.stringify({ subject, content }));
+            alert('Draft saved!');
+        }
+
+        function clearComposer() {
+            document.getElementById('emailSubject').value = '';
+            document.getElementById('emailContent').value = '';
+            document.getElementById('scheduleCheckbox').checked = false;
+            document.getElementById('scheduleDateTime').classList.add('hidden');
+            uploadedFiles = [];
+            document.getElementById('uploadedFiles').innerHTML = '';
+        }
+
+        // Render scheduled emails
+        function renderScheduledEmails() {
+            const scheduledList = document.getElementById('scheduledList');
+            
+            if (scheduledEmails.length === 0) {
+                scheduledList.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No scheduled emails</p>';
+                return;
+            }
+
+            scheduledList.innerHTML = scheduledEmails.map((email, index) => `
+                <div class="email-item">
+                    <div class="email-info">
+                        <div>
+                            <strong>${email.subject}</strong>
+                            <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                                Scheduled: ${new Date(email.scheduledTime).toLocaleString()}
+                            </div>
+                            <div style="font-size: 12px; color: #999;">
+                                Recipients: ${email.recipients.length}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="email-actions">
+                        <span class="email-segment">${email.status}</span>
+                        <button class="icon-btn" onclick="viewScheduledEmail(${index})" title="View">
+                            <i data-lucide="eye"></i>
+                        </button>
+                        <button class="icon-btn delete" onclick="deleteScheduledEmail(${index})" title="Delete">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function viewScheduledEmail(index) {
+            const email = scheduledEmails[index];
+            alert(`Subject: ${email.subject}\n\nScheduled: ${new Date(email.scheduledTime).toLocaleString()}\n\nRecipients: ${email.recipients.length}`);
+        }
+
+        async function deleteScheduledEmail(index) {
+            if (confirm('Delete this scheduled email?')) {
+                try {
+                    const email = scheduledEmails[index];
+                    if (email.id) {
+                        await db.collection('scheduledEmails').doc(email.id).delete();
+                    }
+                    scheduledEmails.splice(index, 1);
+                    renderScheduledEmails();
+                } catch (error) {
+                    console.error('Error deleting scheduled email:', error);
+                    alert('Error deleting scheduled email: ' + error.message);
+                }
+            }
+        }
+
+        // Check and send scheduled emails (run every minute)
+        setInterval(async () => {
+            const now = new Date();
+            for (let i = 0; i < scheduledEmails.length; i++) {
+                const email = scheduledEmails[i];
+                const scheduledTime = new Date(email.scheduledTime);
+                
+                if (email.status === 'pending' && scheduledTime <= now) {
+                    try {
+                        // Send the email
+                        await simulateSendEmail(
+                            email.recipients.map(r => ({ address: r })),
+                            email.subject,
+                            email.content
+                        );
+                        
+                        // Update status in Firebase
+                        if (email.id) {
+                            await db.collection('scheduledEmails').doc(email.id).update({
+                                status: 'sent'
+                            });
+                        }
+                        
+                        email.status = 'sent';
+                        analytics.sent += email.recipients.length;
+                        analytics.delivered += email.recipients.length;
+                        await saveData();
+                        updateDashboard();
+                    } catch (error) {
+                        console.error('Error sending scheduled email:', error);
+                    }
+                }
+            }
+        }, 60000); // Check every minute
+
+        // Update analytics
+        function updateAnalytics() {
+            document.getElementById('analyticsSent').textContent = analytics.sent;
+            document.getElementById('analyticsDelivered').textContent = analytics.delivered;
+            document.getElementById('analyticsOpened').textContent = analytics.opened;
+            
+            const openRate = analytics.sent > 0 ? ((analytics.opened / analytics.sent) * 100).toFixed(1) : 0;
+            document.getElementById('analyticsOpenRate').textContent = openRate + '%';
+        }
+
+        // Settings
+        async function saveSettings() {
+            settings.resendApiKey = document.getElementById('resendApiKey').value;
+            settings.cloudName = document.getElementById('cloudName').value;
+            await saveData();
+            alert('Settings saved!');
+        }
+
+        // Auto-login check
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                await loadData();
+            }
+        });
+
+        // Initialize
+        lucide.createIcons();
+    </script>
+</body>
+  </html>
